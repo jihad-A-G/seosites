@@ -10,10 +10,10 @@ services:
     networks:
       - seosites-network
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 30s
       timeout: 10s
-      retries: 10
+      retries: 5
       start_period: 40s
 
   backend:
@@ -35,8 +35,7 @@ services:
     volumes:
       - ./backend/uploads:/app/uploads
     depends_on:
-      mongodb:
-        condition: service_healthy
+      - mongodb
     networks:
       - seosites-network
     healthcheck:
@@ -59,8 +58,7 @@ services:
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost/api}
       - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost}
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
     networks:
       - seosites-network
     healthcheck:
