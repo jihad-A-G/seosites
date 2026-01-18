@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: mongo:7
+    image: mongo:6
     container_name: seosites-mongodb
     restart: unless-stopped
     environment:
